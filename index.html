@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+    <style>
+        .scrolling-wrapper {
+  display: flex;
+  flex-wrap: no-wrap;
+  overflow-x: auto;
+  cursor: grab;
+}
+
+.scrolling-wrapper.active {
+  cursor: grabbing;
+}
+
+.scrolling-wrapper[data-dragging="true"] a {
+  pointer-events: none;
+}
+
+.card {
+  color: white;
+  background-color: tomato;
+  font-family: monospace;
+  width: 200px;
+  height: 200px;
+  margin-right: 1rem;
+  flex: 0 0 auto;
+  /* Centering text only */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="scrolling-wrapper">
+        <div class="card"><h2>Plain Text</h2></div>
+        <div class="card"><h2><a href="https://www.zac-heisey.com">Link (current window)</a></h2></div>
+        <div class="card"><h2><a href="https://www.zac-heisey.com" target="_blank">Link (new window)</a></h2></div>
+        <img class="card" src="https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjE0NTg5fQ" alt="static image">
+        <div class="card"><h2>Plain Text</h2></div>
+        <a href="https://www.tofugu.com/" target="_blank"><img class="card" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRnfW1e9YM8qzNoy4V8D6dcU-ZqjIujHWJmT28xWYBtEHRlJMCx" alt="linked image"></a>
+        <div class="card"><h2>Plain Text</h2></div>
+        <div class="card"><h2><a href="https://www.zac-heisey.com">Link (current window)</a></h2></div>
+      </div>
+      
+      <section id="credits">
+        <h2>Credits / Resources</h2>
+        <ul>
+          <li><a href="https://twitter.com/hankchizljaw/status/1225822840424947712" target="_blank">Andy Bell Twitter thread</a></li>
+          <li><a href="https://www.freecodecamp.org/news/horizontal-scrolling-using-flexbox-f9d16817f742/" target="_blank">freeCodeCamp demo</a></li>
+          <li><a href="https://codeburst.io/how-to-create-horizontal-scrolling-containers-d8069651e9c6" target="_blank">Codeburst demo</a></li>
+          <li><a href="https://discourse.wicg.io/t/drag-to-scroll-a-simple-way-to-scroll-sideways-on-desktop/3627
+            " target="_blank">Drag to scroll - A simple way to scroll sideways on desktop</a></li>
+          <li><a href="https://codepen.io/thenutz/pen/VwYeYEE" target="_blank">Codepen demo using CSS grid</a></li>
+        </ul>
+      </section>
+      
+     
+  <script>
+const slider = document.querySelector('.scrolling-wrapper');
+let isDown = false;
+let startX;
+let scrollLeft;
+
+slider.addEventListener('mousedown', (e) => {
+  let rect = slider.getBoundingClientRect();
+  isDown = true;
+  slider.classList.add('active');
+  // Get initial mouse position
+  startX = e.pageX - rect.left;
+  // Get initial scroll position in pixels from left
+  scrollLeft = slider.scrollLeft;
+  console.log(startX, scrollLeft);
+});
+
+slider.addEventListener('mouseleave', () => {
+  isDown = false;
+  slider.dataset.dragging = false;
+  slider.classList.remove('active');
+});
+
+slider.addEventListener('mouseup', () => {
+  isDown = false;
+  slider.dataset.dragging = false;
+  slider.classList.remove('active');
+});
+
+slider.addEventListener('mousemove', (e) => {
+  if (!isDown) return;
+  let rect = slider.getBoundingClientRect();
+  e.preventDefault();
+  slider.dataset.dragging = true;
+  // Get new mouse position
+  const x = e.pageX - rect.left;
+  // Get distance mouse has moved (new mouse position minus initial mouse position)
+  const walk = (x - startX);
+  // Update scroll position of slider from left (amount mouse has moved minus initial scroll position)
+  slider.scrollLeft = scrollLeft - walk;
+  console.log(x, walk, slider.scrollLeft);
+});
+  </script>
+  
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>
